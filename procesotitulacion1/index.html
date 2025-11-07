@@ -1,0 +1,1945 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proceso de titulación - ITSA</title>
+    
+    <!-- CSS Combinado -->
+    <style>
+        /* ... (variables y estilos globales) ... */
+        :root {
+            --itsa-green: #006B4E;
+            --sidebar-bg: #14532d; /* verde oscuro original */
+            --sidebar-hover: #15803d;
+            --accent-color: #166534;
+            --link-active-bg: #f3f4f6;
+            --link-active-text: #14532d;
+            --card-bg: #ffffff;
+            --body-bg: #f1f1f1;
+            --text-light: #ffffff;
+            --text-dark: #1f2937;
+            --text-gray: #4b5563;
+            --text-gray-light: #6b7280;
+            --border-color: #e5e7eb;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* ... (animación pulse-animation) ... */
+        @keyframes pulse-animation {
+            0% {
+                box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.7), var(--shadow-lg);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(22, 163, 74, 0), var(--shadow-lg);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(22, 163, 74, 0), var(--shadow-lg);
+            }
+        }
+        
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+            background-color: var(--body-bg);
+            color: var(--text-dark);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden; /* Evita scroll en el body */
+        }
+        
+        /* ... (estilos de títulos h1, h2, h3 en verde) ... */
+        h1 {
+            font-size: 1.875rem; /* 30px */
+            font-weight: 700;
+            color: var(--itsa-green); /* MODIFICADO */
+            margin-bottom: 1.5rem;
+        }
+
+        h2 {
+            font-size: 1.5rem; /* 24px */
+            font-weight: 600;
+            color: var(--itsa-green); /* MODIFICADO */
+            margin-bottom: 1rem;
+        }
+
+        h3 {
+            font-size: 1.25rem; /* 20px */
+            font-weight: 700;
+            color: var(--itsa-green); /* MODIFICADO */
+        }
+        
+        p {
+            color: var(--text-gray);
+            line-height: 1.6;
+        }
+
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        a:hover {
+            color: var(--sidebar-hover);
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 0.5rem; /* 8px */
+            box-shadow: var(--shadow);
+            padding: 1.5rem; /* 24px */
+            margin-bottom: 2rem;
+        }
+
+        .subtitle {
+            font-size: 1.125rem; /* 18px */
+            color: var(--text-gray-light);
+            margin-bottom: 2rem;
+        }
+
+        .grid-2-col {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+        @media (min-width: 768px) {
+            .grid-2-col {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .grid-3-col {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        @media (min-width: 1024px) {
+            .grid-3-col {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        .aspect-video {
+            aspect-ratio: 16 / 9;
+        }
+
+        .image-container,
+        .placeholder {
+            padding: 0; /* Anulamos el padding en AMBAS tarjetas */
+            border-radius: 0.5rem; /* Aseguramos que el radio se mantenga */
+            overflow: hidden; /* Previene cualquier desbordamiento */
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* El radio se aplica al contenedor (.image-container) */
+        }
+
+        .placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--border-color);
+        }
+
+        /* ... (estilo iframe eliminado) ... */
+
+        .placeholder svg {
+            /* Usamos un tamaño relativo al contenedor */
+            width: 25%;
+            height: 25%;
+            
+            /* Ponemos un límite para que no sea gigante */
+            max-width: 64px;
+            max-height: 64px;
+            
+            color: var(--text-gray-light);
+        }
+
+
+        .center-content {
+            display: flex;
+            justify-content: center;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* ... (Resto del CSS : .top-header, .main-layout, .sidebar, etc.) ... */
+        
+        /* --- INICIO DE LA MODIFICACIÓN (Centrar Logo) --- */
+        /* ===== NUEVO ENCABEZADO SUPERIOR ===== */
+        .top-header {
+            width: 100%;
+            background-color: var(--itsa-green);
+            padding: 0.1rem 1.5rem; /* 12px 24px */
+            box-shadow: var(--shadow);
+            z-index: 1001; /* Encima de la sidebar */
+            
+            /* Añadido para centrar el logo */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .header-logo {
+            /* Ajustado para mejor proporción */
+            height: 165px; 
+            width: auto;
+        }
+        /* --- FIN DE LA MODIFICACIÓN --- */
+
+        /* ===== DISEÑO PRINCIPAL ===== */
+        .main-layout {
+            display: flex;
+            flex: 1; /* Ocupa el resto de la altura */
+            overflow: hidden; /* Evita scroll en el layout */
+        }
+
+        /* ===== BARRA LATERAL (Sidebar) ===== */
+        .sidebar {
+            width: 256px; /* w-64 */
+            background-color: var(--sidebar-bg);
+            color: var(--text-light);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+        .sidebar-logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+            height: 4rem;
+        }
+        .sidebar-logo {
+            width: 4rem;
+            height: 4rem;
+            background-color: var(--text-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .sidebar-logo.small {
+            width: 2.5rem;
+            height: 2.5rem;
+        }
+        .sidebar-logo span {
+            color: var(--sidebar-bg);
+            font-size: 1.875rem;
+            font-weight: 700;
+        }
+        .sidebar-logo.small span {
+            font-size: 1.25rem;
+        }
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem; /* space-y-2 */
+        }
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem; /* space-x-3 */
+            padding: 0.75rem; /* p-3 */
+            border-radius: 0.5rem; /* rounded-lg */
+            transition: background-color 0.2s, color 0.2s;
+            color: var(--text-light);
+            cursor: pointer; /* Añadido para enlaces JS */
+        }
+        
+        .nav-link svg {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+
+        /* ... (Corrección Hover Menú) ... */
+        /* Estilo para el link ACTIVO */
+        .nav-link-active {
+            background-color: var(--link-active-bg);
+            color: var(--link-active-text);
+            font-weight: 600;
+        }
+        
+        /* Estilo para el link ACTIVO al pasar el mouse (se queda igual) */
+        .nav-link-active:hover {
+            background-color: var(--link-active-bg);
+            color: var(--link-active-text);
+        }
+
+        /* Estilo para el link INACTIVO */
+        .nav-link-inactive {
+            color: var(--text-light);
+        }
+
+        /* Estilo para el link INACTIVO al pasar el mouse (se pone verde) */
+        .nav-link-inactive:hover {
+            background-color: var(--sidebar-hover);
+            color: var(--text-light);
+        }
+        /* ... (Fin Corrección Hover Menú) ... */
+
+
+        /* ===== CONTENEDOR DE CONTENIDO (Header Móvil + Main) ===== */
+        .content-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        /* Header Móvil */
+        .mobile-header {
+            display: none; /* Oculto en desktop */
+            background-color: var(--sidebar-bg);
+            color: var(--text-light);
+            padding: 1rem;
+            box-shadow: var(--shadow-lg);
+            justify-content: space-between;
+            align-items: center;
+        }
+        .mobile-header-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            font-size: 1.125rem;
+        }
+        .menu-btn {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            padding: 0.5rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+        }
+        .menu-btn:hover {
+            background-color: var(--sidebar-hover);
+        }
+
+        /* Menú Móvil */
+        .mobile-nav {
+            display: none; /* Oculto por defecto */
+            background-color: var(--sidebar-bg);
+            color: var(--text-light);
+            padding: 1rem;
+            gap: 0.5rem;
+            flex-direction: column;
+        }
+
+        /* Contenido Principal */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+        }
+        @media (min-width: 768px) {
+            .main-content {
+                padding: 2.5rem;
+            }
+        }
+        /* Scrollbar (del <style> original) */
+        .main-content::-webkit-scrollbar { width: 8px; }
+        .main-content::-webkit-scrollbar-thumb { background-color: #c4c4c4; border-radius: 4px; }
+        .main-content::-webkit-scrollbar-track { background-color: #f1f1f1; }
+
+        .content-section {
+            display: block; /* La lógica JS gestiona el "hidden" */
+        }
+
+        /* ===== ESTILOS DE COMPONENTES (Botones, Formularios, etc.) ===== */
+        .button {
+            display: inline-block;
+            font-weight: 700;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: var(--shadow);
+            transition: all 0.2s;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+        }
+        .button-primary {
+            background-color: var(--accent-color);
+            color: var(--text-light);
+        }
+        .button-primary:hover {
+            background-color: var(--sidebar-hover);
+        }
+
+        /* ... (Estilos .button-accent con animación) ... */
+        .button-accent {
+            background-color: #16a34a; /* green-600 */
+            color: var(--text-light);
+            /* Nuevas propiedades para realce */
+            display: inline-flex; /* Para alinear icono y texto */
+            align-items: center;
+            gap: 0.5rem; /* 8px - Espacio entre icono y texto */
+            font-size: 1.125rem; /* 18px - Un poco más grande */
+            padding: 0.875rem 1.75rem; /* 14px 28px - Más relleno */
+            box-shadow: var(--shadow-lg); /* Sombra más pronunciada */
+            animation: pulse-animation 2.5s infinite; /* Animación de pulso */
+        }
+        .button-accent:hover {
+            background-color: var(--accent-color);
+            transform: scale(1.05); /* Mantiene el zoom en hover */
+            animation-play-state: paused; /* Pausa la animación de pulso */
+        }
+        
+
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        @media (min-width: 768px) {
+            .button-group {
+                flex-direction: row;
+            }
+        }
+        .button-group .button {
+            flex: 1;
+        }
+        .button.full-width {
+            width: 100%;
+        }
+
+        /* Formularios */
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .contact-form div {
+            display: flex;
+            flex-direction: column;
+        }
+        .contact-form label {
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+            color: var(--text-gray);
+        }
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            outline: 2px solid var(--itsa-green);
+            border-color: var(--itsa-green);
+        }
+
+        /* ===== ESTILOS DE SECCIÓN: INICIO ===== */
+        .workflow-diagram {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+            gap: 1rem;
+        }
+        @media (min-width: 768px) {
+            .workflow-diagram {
+                flex-direction: row;
+            }
+        }
+        .workflow-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-gray-light);
+        }
+        .workflow-step svg {
+            color: var(--accent-color);
+        }
+        .workflow-step span:nth-of-type(1) {
+            margin-top: 0.5rem;
+            font-weight: 500;
+        }
+        .workflow-arrow.desktop { display: none; }
+        .workflow-arrow.mobile { display: block; }
+        @media (min-width: 768px) {
+            .workflow-arrow.desktop { display: block; }
+            .workflow-arrow.mobile { display: none; }
+        }
+
+        /* ===== ESTILOS DE SECCIÓN: REQUISITOS ===== */
+        .requirement-card {
+            display: flex;
+            flex-direction: column;
+        }
+        .requirement-card .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.25rem;
+        }
+        .requirement-card h3 {
+            font-size: 1.5rem;
+        }
+        .icon-wrapper {
+            padding: 0.75rem;
+            background-color: #d1fae5; /* green-100 */
+            color: var(--accent-color);
+            border-radius: 9999px;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+        .card-subtitle {
+            font-size: 0.875rem;
+            color: var(--text-gray-light);
+            margin-bottom: 1rem;
+            margin-top: -0.5rem;
+        }
+        .checklist {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            color: var(--text-gray);
+        }
+        .checklist li {
+            display: flex;
+            align-items: flex-start;
+        }
+        .checklist li::before {
+            content: '✔'; /* Usando un check simple */
+            color: var(--accent-color);
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            margin-right: 0.5rem;
+            margin-top: 0.125rem;
+        }
+        @media (min-width: 1024px) {
+            .requirement-card.large {
+                grid-column: span 2 / span 2;
+            }
+        }
+        .document-downloads {
+            margin-top: 3rem;
+        }
+        .document-downloads h2 {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--accent-color);
+        }
+        .download-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        .download-item {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 1rem;
+            background-color: #f9fafb; /* gray-50 */
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+        }
+        @media (min-width: 768px) {
+            .download-item {
+                flex-direction: row;
+                align-items: center;
+            }
+        }
+        .download-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 500;
+            color: var(--text-gray);
+            margin-bottom: 0.75rem;
+        }
+        .download-info svg {
+            color: #dc2626; /* red-600 */
+            flex-shrink: 0;
+        }
+        @media (min-width: 768px) {
+            .download-info {
+                margin-bottom: 0;
+            }
+        }
+        .button-download {
+            background-color: var(--accent-color);
+            color: var(--text-light);
+            font-weight: 700;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            box-shadow: var(--shadow);
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-shrink: 0;
+        }
+        .button-download:hover {
+            background-color: var(--sidebar-hover);
+        }
+
+        /* ===== ESTILOS DE SECCIÓN: CRONOGRAMA (Timeline) ===== */
+        .timeline-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem 4rem;
+        }
+        @media (min-width: 1024px) {
+            .timeline-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 4rem 4rem;
+            }
+        }
+        .timeline-item {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        @media (min-width: 1024px) {
+            .timeline-item {
+                align-items: center;
+                text-align: left;
+            }
+        }
+        .timeline-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 4rem;
+            height: 4rem;
+            background-color: var(--sidebar-bg);
+            color: var(--text-light);
+            border-radius: 9999px;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 1rem;
+            z-index: 10;
+            border: 4px solid var(--body-bg);
+        }
+        @media (min-width: 1024px) {
+            .timeline-icon {
+                position: absolute;
+                top: 0;
+                left: -2rem;
+            }
+        }
+        .timeline-card {
+            width: 100%;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-lg);
+        }
+        @media (min-width: 1024px) {
+            .timeline-card {
+                margin-left: 3rem;
+            }
+        }
+        .timeline-date {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+        .timeline-title {
+            margin: 0.5rem 0;
+        }
+        .timeline-desc {
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+            font-size: 0.875rem;
+        }
+        .timeline-checklist {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+        .timeline-checklist li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-gray);
+        }
+        .timeline-checklist li::before {
+            content: '✔';
+            color: var(--accent-color);
+        }
+        /* Líneas del Timeline (del <style> original) */
+        @media (min-width: 1024px) {
+            .timeline-item-lg:not(:last-child)::after {
+                content: '';
+                position: absolute;
+                top: 50%;
+                right: 0;
+                transform: translateX(100%) translateY(-50%);
+                width: 50%; /* Ajusta según el 'gap' */
+                height: 4px;
+                background-color: var(--sidebar-bg);
+                z-index: 0;
+            }
+        }
+        @media (max-width: 1023px) {
+            .timeline-item-md:not(:last-child)::after {
+                content: '';
+                position: absolute;
+                left: 2rem; /* Alineado con el icono */
+                bottom: 0;
+                transform: translateX(-50%) translateY(100%);
+                width: 4px;
+                height: 3rem; /* 'gap-y-12' */
+                background-color: var(--sidebar-bg);
+                z-index: 0;
+            }
+        }
+
+        /* ===== ESTILOS DE SECCIÓN: PASOS ===== */
+        .flowchart-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .flowchart-list {
+            width: 100%;
+            max-width: 42rem; /* 672px */
+            list-style: none;
+        }
+        .flowchart-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .flowchart-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 5rem;
+            height: 5rem;
+            background-color: var(--sidebar-bg);
+            color: var(--text-light);
+            border-radius: 9999px;
+            box-shadow: var(--shadow-lg);
+            border: 4px solid var(--card-bg);
+            z-index: 10;
+        }
+        .flowchart-card {
+            width: 100%;
+            text-align: center;
+            margin-top: -2.5rem; /* -mt-8 */
+            padding-top: 3rem; /* pt-12 */
+            border: 1px solid var(--border-color);
+        }
+        .flowchart-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+        .flowchart-arrow {
+            display: flex;
+            justify-content: center;
+            margin: 1rem 0;
+            color: var(--text-gray-light);
+        }
+        .flowchart-checklist {
+            list-style: none;
+            margin-top: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            color: var(--text-gray);
+        }
+        .flowchart-checklist li {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .flowchart-checklist svg {
+            color: var(--accent-color);
+        }
+
+        /* ===== ESTILOS DE SECCIÓN: FAQ ===== */
+        .faq-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .faq-item {
+            background-color: var(--card-bg);
+            border-radius: 0.5rem;
+            box-shadow: var(--shadow);
+            border-bottom: 1px solid var(--border-color);
+        }
+        .faq-item summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            list-style: none;
+            padding: 1.5rem;
+            font-size: 1.125rem;
+            font-weight: 500;
+        }
+        .faq-item summary::-webkit-details-marker {
+            display: none;
+        }
+        .faq-item p {
+            padding: 0 1.5rem 1.5rem 1.5rem;
+            margin-left: 1.5rem;
+            border-left: 2px solid var(--accent-color);
+        }
+        .faq-icon {
+            transition: transform 0.3s;
+        }
+        .faq-item[open] .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        /* ===== ESTILOS DE SECCIÓN: CONTACTO ===== */
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            color: var(--text-gray);
+        }
+        .contact-info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+        .contact-info-item svg {
+            width: 24px;
+            height: 24px;
+            color: var(--accent-color);
+            margin-top: 0.25rem;
+            flex-shrink: 0;
+        }
+        /* ... (estilo .contact-info-item h3 en verde) ... */
+        .contact-info-item h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--itsa-green); /* MODIFICADO */
+        }
+        
+
+        /* ===== ESTILOS DEL CHATBOT ===== */
+        .chat-modal-container {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1002;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .chat-modal {
+            background-color: var(--card-bg);
+            border-radius: 0.5rem;
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+            max-width: 32rem; /* 512px */
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 70vh;
+            max-height: 500px;
+        }
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background-color: var(--sidebar-bg);
+            color: var(--text-light);
+        }
+        .chat-header h3 {
+            font-weight: 700;
+            font-size: 1.125rem;
+            color: var(--text-light); /* Se mantiene blanco por el fondo oscuro */
+        }
+        .chat-close-btn {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+        }
+        .chat-close-btn:hover {
+            color: #d1d5db; /* gray-300 */
+        }
+        .chat-window {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            background-color: var(--body-bg);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .chat-window::-webkit-scrollbar { width: 6px; }
+        .chat-window::-webkit-scrollbar-thumb { background-color: #9ca3af; border-radius: 3px; }
+        .chat-window::-webkit-scrollbar-track { background-color: var(--border-color); }
+        
+        /* ... (Estilos del chatbot sin cambios) ... */
+        .bot-message-wrapper {
+            display: flex;
+            align-items: flex-end; /* Alinea avatar y burbuja abajo */
+            gap: 0.5rem; /* 8px */
+            align-self: flex-start;
+            max-width: 90%; /* El wrapper define el ancho máximo */
+        }
+
+        .bot-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--border-color);
+            flex-shrink: 0;
+            /* Placeholder simple de robot */
+            background-image: url("https://placehold.co/40x40/e5e7eb/4b5563?text=🤖");
+            background-size: cover;
+            background-position: center;
+            margin-bottom: 0.75rem; /* Se alinea con el padding de la burbuja */
+        }
+
+        .chat-bubble {
+            max-width: 100%; /* La burbuja ocupa el 100% de su contenedor */
+            word-wrap: break-word;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+        }
+
+        .user-bubble {
+            background-color: var(--accent-color);
+            color: white;
+            align-self: flex-end;
+            max-width: 80%; /* Mantiene el ancho original para el usuario */
+        }
+
+        .bot-bubble {
+            background-color: var(--border-color);
+            color: var(--text-dark);
+            /* align-self y max-width ahora están en .bot-message-wrapper */
+        }
+        
+        .chat-input-area {
+            padding: 1rem;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--card-bg);
+            display: flex;
+        }
+        .chat-input-area input {
+            flex: 1;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem 0 0 0.5rem;
+        }
+        .chat-input-area input:focus {
+            outline: 2px solid var(--itsa-green);
+            border-color: var(--itsa-green);
+            z-index: 1;
+        }
+        .chat-send-btn {
+            background-color: var(--accent-color);
+            color: var(--text-light);
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0 0.5rem 0.5rem 0;
+            cursor: pointer;
+        }
+        .chat-send-btn:hover {
+            background-color: var(--sidebar-hover);
+        }
+
+        /* ===== RESPONSIVIDAD (MÓVIL) ===== */
+        @media (max-width: 767px) {
+            body {
+                height: auto;
+                overflow: auto;
+            }
+            .main-layout {
+                flex-direction: column;
+                height: auto;
+            }
+            .sidebar {
+                display: none; /* Oculta sidebar de escritorio */
+            }
+            .content-wrapper {
+                height: auto;
+                overflow: visible;
+            }
+            .mobile-header {
+                display: flex; /* Muestra header móvil */
+            }
+            .mobile-nav {
+                /* JS gestionará el display: flex / none */
+            }
+            .main-content {
+                height: auto;
+                overflow-y: visible;
+                padding: 1rem;
+            }
+            .top-header {
+                position: static; /* El header no será sticky en móvil */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- --- INICIO DE LA MODIFICACIÓN (Logo) --- -->
+    <header class="top-header">
+        <!-- Se cambió el 'src' a './logoitsa.jpg' y se actualizó el mensaje de error. -->
+        <img src="img/logoitsa.png" alt="Logo ITSA" class="header-logo" 
+             onerror="this.style.display='none'; console.error('Error: No se pudo cargar el logo \'./logoitsa.jpg\'. Asegúrate de que el archivo esté en la misma carpeta que index.html.')">
+    </header>
+    <!-- --- FIN DE LA MODIFICACIÓN --- -->
+
+    <!-- Contenedor principal (sin cambios) -->
+    <div class="main-layout">
+        
+        <!-- Barra lateral (sin cambios) -->
+        <aside class="sidebar">
+            <!-- ... (contenido de la barra lateral sin cambios) ... -->
+            <nav id="desktop-nav" class="sidebar-nav">
+                <!-- 'onclick' removido, el JS lo maneja con 'data-section' -->
+                <a href="#" data-section="inicio" class="nav-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-home"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    <span>Inicio</span>
+                </a>
+                <a href="#" data-section="requisitos" class="nav-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-text"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>
+                    <span>Requisitos</span>
+                </a>
+                <a href="#" data-section="cronograma" class="nav-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+                    <span>Cronograma</span>
+                </a>
+                <a href="#" data-section="pasos" class="nav-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg>
+                    <span>Pasos del proceso</span>
+                </a>
+                <a href="#" data-section="faq" class="nav-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-help-circle"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+                    <span>Preguntas frecuentes</span>
+                </a>
+                <a href="#" data-section="contacto" class="nav-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                    <span>Contacto</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Contenedor de contenido (sin cambios) -->
+        <div class="content-wrapper">
+            <!-- Header móvil (sin cambios) -->
+            <header class="mobile-header">
+                <!-- ... (contenido del header móvil sin cambios) ... -->
+                <div class="mobile-header-logo">
+                    <span>INSTITUTO TECNOLÓGICO SACABA</span>
+                </div>
+                <button id="menu-btn" class="menu-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+                </button>
+            </header>
+
+            <!-- Menú desplegable (sin cambios) -->
+            <nav id="mobile-menu" class="mobile-nav">
+                <!-- ... (contenido del menú móvil sin cambios) ... -->
+                <a href="#" data-section="inicio" class="nav-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-home"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    <span>Inicio</span>
+                </a>
+                <a href="#" data-section="requisitos" class="nav-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-text"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>
+                    <span>Requisitos</span>
+                </a>
+                <a href="#" data-section="cronograma" class="nav-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+                    <span>Cronograma</span>
+                </a>
+                <a href="#" data-section="pasos" class="nav-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg>
+                    <span>Pasos del proceso</span>
+                </a>
+                <a href="#" data-section="faq" class="nav-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-help-circle"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+                    <span>Preguntas frecuentes</span>
+                </a>
+                <a href="#" data-section="contacto" class="nav-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                    <span>Contacto</span>
+                </a>
+            </nav>
+
+            <!-- Área de contenido principal -->
+            <main class="main-content">
+                
+                <!-- SECCIÓN INICIO -->
+                <div id="inicio-section" class="content-section">
+                    <h1>INICIO</h1>
+                    
+                    <div class="card workflow-diagram">
+                        <!-- ... (contenido de workflow sin cambios) ... -->
+                        <div class="workflow-step">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-text"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>
+                            <span>Revisión de</span>
+                            <span>Documentos</span>
+                        </div>
+                        
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right workflow-arrow desktop"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-down workflow-arrow mobile"><line x1="12" x2="12" y1="5" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+
+                        <div class="workflow-step">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-school"><path d="m4 6 8-4 8 4"/><path d="m18 10 4 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-8l4-2"/><path d="M14 22v-4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v4"/><path d="M18 5v17"/><path d="M22 5v17"/><path d="M2 10v12"/></svg>
+                            <span>Defensa de</span>
+                            <span>Proyecto</span>
+                        </div>
+
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right workflow-arrow desktop"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-down workflow-arrow mobile"><line x1="12" x2="12" y1="5" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+
+                        <div class="workflow-step">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-check"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/><path d="m9 16 2 2 4-4"/></svg>
+                            <span>Entrega de</span>
+                            <span>Título</span>
+                        </div>
+                    </div>
+
+                    <h2>CRONOGRAMA Y DOCUMENTOS</h2>
+                    <p class="subtitle">Descripción breve del servicio o trámite. Accede a los formularios y reglamentos para iniciar tu proceso.</p>
+                    
+                    <div class="button-group">
+                        <a href="https://eispdm.com/public/imagenes/documentos/FMDG-1.pdf" target="_blank" rel="noopener noreferrer" class="button button-primary">
+                            Formulario FMDG-1
+                        </a>
+                        <a href="https://drive.google.com/uc?export=download&id=1COzD76GQID_zMDuppXxgx4LeJxTy3y_g" download="Reglamento-Titulacion.pdf" class="button button-primary">
+                            Reglamento
+                        </a>
+                    </div>
+
+                    <!-- ... (Video e Imagen sin cambios) ... -->
+                    <div class="grid-2-col">
+                        <div class="card aspect-video image-container">
+                            <!-- La imagen de Google Drive se mantiene -->
+                            <img src="img/titulacion.jpg" alt="Estudiantes recibiendo título" 
+                                 onerror="this.onerror=null; this.src='https://placehold.co/600x337/e0e0e0/777?text=Imagen+no+disponible';">
+                        </div>
+                        
+                        <div class="card aspect-video image-container">
+                            <!-- La imagen de Google Drive se mantiene -->
+                            <img src="img/graduados.jpg" alt="Estudiantes graduadas celebrando" 
+                                 onerror="this.onerror=null; this.src='https://placehold.co/600x337/e0e0e0/777?text=Imagen+no+disponible';">
+                        </div>
+                    </div>
+                    
+
+                    
+                    <div class="center-content">
+                        <button id="open-chat-btn" class="button button-accent">
+                            <!-- Icono añadido -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle"><path d="m3 21 1.9-5.7a8.5 8.5 0 1 1 3.8 3.8z"/></svg>
+                            <span>Solicitar ayuda</span>
+                        </button>
+                    </div>
+                    
+
+                </div>
+
+                <!-- SECCIÓN REQUISITOS (sin cambios) -->
+                <div id="requisitos-section" class="content-section hidden">
+                    <!-- ... (contenido de requisitos sin cambios) ... -->
+                    <h1>Requisitos de titulación</h1>
+                    <p class="subtitle">
+                        Asegúrate de cumplir con todos los requisitos divididos en las siguientes categorías para iniciar tu proceso.
+                    </p>
+                
+                    <div class="grid-3-col">
+                        <div class="card requirement-card">
+                            <div class="card-header">
+                                <span class="icon-wrapper">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-marked"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><path d="M14 15V9h-2v6"/></svg>
+                                </span>
+                                <h3>1. Académicos</h3>
+                            </div>
+                            <ul class="checklist">
+                                <li><span>Haber concluido y aprobado todas las materias del plan de estudios.</span></li>
+                                <li><span>No tener materias reprobadas ni pendientes de notas o prácticas.</span></li>
+                                <li><span>Haber cumplido con la práctica laboral o comunitaria (PEC), certificada (original y copia).</span></li>
+                                <li><span>Informe del docente supervisor de práctica laboral.</span></li>
+                                <li><span>Informe de pre-defensa según modalidad de graduación.</span></li>
+                                <li><span>3 ejemplares del proyecto empastado (forro verde oscuro, letras doradas).</span></li>
+                            </ul>
+                        </div>
+                
+                        <div class="card requirement-card">
+                            <div class="card-header">
+                                <span class="icon-wrapper">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-folder-open"><path d="M11 20H4a2 2 0 0 1-2-2V5c0-1.1.9-2 2-2h3.93a2 2 0 0 1 1.66.9l.82 1.2a2 2 0 0 0 1.66.9H20a2 2 0 0 1 2 2v1.5"/><path d="M22 19a2 2 0 0 1-2 2H7.5a2 2 0 0 1-1.6-.8L2 12V7.1a2 2 0 0 1 1.4-.8L4.6 6H7a2 2 0 0 1 2 2v1"/><path d="M22 19v-2.5a1.5 1.5 0 0 0-1.5-1.5v0a1.5 1.5 0 0 0-1.5 1.5V19"/></svg>
+                                </span>
+                                <h3>2. Documentación</h3>
+                            </div>
+                            <p class="card-subtitle">En carpeta de color institucional según carrera.</p>
+                            <ul class="checklist">
+                                <li><span>Diploma de bachiller (fotocopia legalizada).</span></li>
+                                <li><span>Certificado de nacimiento (fotocopia legalizada).</span></li>
+                                <li><span>Carnet de identidad vigente (fotocopia legalizada).</span></li>
+                                <li><span>2 fotografías 4x4 (color, fondo rojo/azul, ropa formal).</span></li>
+                                <li><span>Formulario de admisión (disponible <a href="http://orion.itsa.edu.bo/postulantes/registrarPostulante.xhtml" target="_blank" rel="noopener noreferrer">en línea aquí</a>).</span></li>
+                                <li><span>Constancia de defensa o proyecto de grado.</span></li>
+                            </ul>
+                        </div>
+                
+                        <div class="card requirement-card">
+                            <div class="card-header">
+                                <span class="icon-wrapper">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-school"><path d="m4 6 8-4 8 4"/><path d="m18 10 4 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-8l4-2"/><path d="M14 22v-4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v4"/><path d="M18 5v17"/><path d="M22 5v17"/><path d="M2 10v12"/></svg>
+                                </span>
+                                <h3>3. Institucionales</h3>
+                            </div>
+                            <ul class="checklist">
+                                <li><span>Formulario FMDG-1 (descargable en la sección 'Inicio').</span></li>
+                                <li><span>Comprobante de pago de aranceles administrativos.</span></li>
+                                <li><span>Carta de solicitud dirigida al Director Académico.</span></li>
+                                <li><span>Reglamento de titulación firmado (aceptando normas).</span></li>
+                                <li><span>Fotocopia de papeleta de pago por derecho a defensa.</span></li>
+                            </ul>
+                        </div>
+                
+                        <div class="card requirement-card">
+                            <div class="card-header">
+                                <span class="icon-wrapper">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-gantt-chart-square"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 8h-3"/><path d="M18 8h-6"/><path d="M9 13h-3"/><path d="M18 13h-6"/><path d="M9 18h-3"/><path d="M18 18h-6"/></svg>
+                                </span>
+                                <h3>4. Modalidades</h3>
+                            </div>
+                            <p class="card-subtitle">Modalidades de titulación disponibles:</p>
+                            <ul class="checklist">
+                                <li><span>Proyecto de grado</span></li>
+                                <li><span>Examen de grado</span></li>
+                                <li><span>Trabajo dirigido</span></li>
+                                <li><span>Excelencia académica</span></li>
+                                <li><span>Equivalencia de título</span></li>
+                            </ul>
+                        </div>
+                
+                        <div class="card requirement-card large">
+                            <div class="card-header">
+                                <span class="icon-wrapper">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clipboard-check"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2Z"/><path d="m9 12 2 2 4-4"/></svg>
+                                </span>
+                                <h3>5. Complementarios</h3>
+                            </div>
+                            <ul class="checklist">
+                                <li><span>Certificado de no adeudo de biblioteca, laboratorio y caja.</span></li>
+                                <li><span>Certificación de práctica profesional o comunitaria.</span></li>
+                                <li><span>Informe final o defensa del proyecto (una vez inscrito).</span></li>
+                            </ul>
+                        </div>
+                    </div> 
+
+                    <div class="card document-downloads">
+                        <h2>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-stack"><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8.5L10 2z"/><path d="M14 2H6a2 2 0 0 0-2 2v2"/><path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2h2"/></svg>
+                            Reglamentos y documentos oficiales
+                        </h2>
+                        <p>Aquí puedes descargar los documentos oficiales necesarios para tu modalidad de graduación.</p>
+                        
+                        <ul class="download-list">
+                            <li class="download-item">
+                                <div class="download-info">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-type-pdf"><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8.5L14.5 2z"/><path d="M8 18h1.5a1.5 1.5 0 0 0 0-3H8v3Z"/><path d="M17.5 18h1.5a1.5 1.5 0 0 0 0-3h-1.5v3Z"/><path d="M11 18h1.5a1.5 1.5 0 0 0 0-3H11v3Z"/><path d="M14.5 12h-5V9h5v3Z"/></svg>
+                                    <span>Convocatoria a defensa de proyecto</span>
+                                </div>
+                                <a href="https://drive.google.com/uc?export=download&id=1EygS4_hkU_WYtHzQdeAD-vxRfTejqCpU" download="Convocatoria-Defensa-Proyecto.pdf" class="button button-download">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                                    <span>Descargar</span>
+                                </a>
+                            </li>
+                            <li class="download-item">
+                                <div class="download-info">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-type-pdf"><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8.5L14.5 2z"/><path d="M8 18h1.5a1.5 1.5 0 0 0 0-3H8v3Z"/><path d="M17.5 18h1.5a1.5 1.5 0 0 0 0-3h-1.5v3Z"/><path d="M11 18h1.5a1.5 1.5 0 0 0 0-3H11v3Z"/><path d="M14.5 12h-5V9h5v3Z"/></svg>
+                                    <span>Requisitos para la defensa de proyecto</span>
+                                </div>
+                                <a href="https://drive.google.com/uc?export=download&id=1cc5jsFRyt7Swh8sgIbX9SeBiS1hdEoCM" download="Requisitos-Defensa-Proyecto.pdf" class="button button-download">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                                    <span>Descargar</span>
+                                </a>
+                            </li>
+                            <li class="download-item">
+                                <div class="download-info">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-type-pdf"><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8.5L14.5 2z"/><path d="M8 18h1.5a1.5 1.5 0 0 0 0-3H8v3Z"/><path d="M17.5 18h1.5a1.5 1.5 0 0 0 0-3h-1.5v3Z"/><path d="M11 18h1.5a1.5 1.5 0 0 0 0-3H11v3Z"/><path d="M14.5 12h-5V9h5v3Z"/></svg>
+                                    <span>Estructura para elaborar propuesta de perfil</span>
+                                </div>
+                                <a href="https://drive.google.com/uc?export=download&id=1JuuFS8foW2M1F7h9_ZOeNTjCCHddq13q" download="Estructura-Propuesta-Perfil.pdf" class="button button-download">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                                    <span>Descargar</span>
+                                </a>
+                            </li>
+                            <li class="download-item">
+                                <div class="download-info">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-type-pdf"><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8.5L14.5 2z"/><path d="M8 18h1.5a1.5 1.5 0 0 0 0-3H8v3Z"/><path d="M17.5 18h1.5a1.5 1.5 0 0 0 0-3h-1.5v3Z"/><path d="M11 18h1.5a1.5 1.5 0 0 0 0-3H11v3Z"/><path d="M14.5 12h-5V9h5v3Z"/></svg>
+                                    <span>Elaboración de pre-defensa</span>
+                                </div>
+                                <a href="https://drive.google.com/uc?export=download&id=1yO4BJUaiJfBzFhg4lgp1_U4aOJKrTjk_" download="Elaboracion-Pre-Defensa.pdf" class="button button-download">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                                    <span>Descargar</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN CRONOGRAMA (sin cambios) -->
+                <div id="cronograma-section" class="content-section hidden">
+                    <!-- ... (contenido de cronograma sin cambios) ... -->
+                    <h1>Cronograma de titulación</h1>
+                    <p class="subtitle">
+                        Revisa las fases y fechas clave de tu proceso de titulación.
+                    </p>
+                    
+                    <div class="timeline-grid">
+                        <!-- FASE 1 -->
+                        <div class="timeline-item timeline-item-lg timeline-item-md">
+                            <div class="timeline-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-plus-2"><path d="M4 22h14a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v4"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M3 15h6"/><path d="M6 12v6"/></svg>
+                            </div>
+                            <div class="card timeline-card">
+                                <span class="timeline-date">Abril - Junio</span>
+                                <h3 class="timeline-title">Fase 1: Inscripción</h3>
+                                <p class="timeline-desc">Presentación de solicitud y documentación inicial.</p>
+                                <ul class="timeline-checklist">
+                                    <li>Llenado del formulario FMDG-1</li>
+                                    <li>Registro en el sistema</li>
+                                    <li>Entrega de documentos básicos</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- FASE 2 -->
+                        <div class="timeline-item timeline-item-lg timeline-item-md">
+                            <div class="timeline-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-check-2"><path d="M4 22h14a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v4"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M3 15h6"/><path d="m9 15 2 2 4-4"/></svg>
+                            </div>
+                            <div class="card timeline-card">
+                                <span class="timeline-date">Febrero - Junio</span>
+                                <h3 class="timeline-title">Fase 2: Aprobación de Perfil</h3>
+                                <p class="timeline-desc">Presentación y aprobación del perfil de proyecto.</p>
+                                <ul class="timeline-checklist">
+                                    <li>Presentación del perfil</li>
+                                    <li>Revisión por tutor</li>
+                                    <li>Correcciones y aprobación</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <!-- FASE 3 -->
+                        <div class="timeline-item timeline-item-lg timeline-item-md">
+                            <div class="timeline-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-gantt-chart"><path d="M8 6h10"/><path d="M6 12h9"/><path d="M11 18h7"/></svg>
+                            </div>
+                            <div class="card timeline-card">
+                                <span class="timeline-date">Junio 12 - 31</span>
+                                <h3 class="timeline-title">Fase 3: Defensa de perfiles</h3>
+                                <p class="timeline-desc">Ejecución y desarrollo del proyecto de grado.</p>
+                                <ul class="timeline-checklist">
+                                    <li>Desarrollo del proyecto</li>
+                                    <li>Seguimiento con tutor</li>
+                                    <li>Avances parciales</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- FASE 4 -->
+                        <div class="timeline-item timeline-item-lg timeline-item-md">
+                            <div class="timeline-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clipboard-check"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="m9 14 2 2 4-4"/></svg>
+                            </div>
+                            <div class="card timeline-card">
+                                <span class="timeline-date">Noviembre 04 - 07</span>
+                                <h3 class="timeline-title">Fase 4: Pre defensa de proyectos</h3>
+                                <p class="timeline-desc">Revisión y correcciones finales del borrador.</p>
+                                <ul class="timeline-checklist">
+                                    <li>Revisión final del tutor</li>
+                                    <li>Entrega de borrador</li>
+                                    <li>Correcciones finales</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- FASE 5 -->
+                        <div class="timeline-item timeline-item-lg timeline-item-md">
+                            <div class="timeline-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-graduation-cap"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.084a1 1 0 0 0 0 1.838l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 6 0 0 0 12 0v-3.5"/></svg>
+                            </div>
+                            <div class="card timeline-card">
+                                <span class="timeline-date">Noviembre 24 - Diciembre 04</span>
+                                <h3 class="timeline-title">Fase 5: Defensa del Proyecto</h3>
+                                <p class="timeline-desc">Defensa oral ante el tribunal evaluador.</p>
+                                <ul class="timeline-checklist">
+                                    <li>Preparación de presentación</li>
+                                    <li>Defensa oral</li>
+                                    <li>Calificación final</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- FASE 6 -->
+                        <div class="timeline-item timeline-item-lg timeline-item-md">
+                            <div class="timeline-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-stamp"><path d="m6 15-4-4"/><path d="m10 15-4-4"/><path d="m14 15-4-4"/><path d="m18 15-4-4"/><path d="M6 11V6.5a4.5 4.5 0 0 1 9 0V11"/><path d="M18 11V6.5a4.5 4.5 0 0 0-3.5-4.35"/><path d="M12 2v2"/><path d="M10 20v-3.4a1.8 1.8 0 0 1 1.8-1.8h0a1.8 1.8 0 0 1 1.8 1.8V20"/><path d="M4 15.5V20a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4.5"/></svg>
+                            </div>
+                            <div class="card timeline-card">
+                                <span class="timeline-date">Noviembre</span>
+                                <h3 class="timeline-title">Fase 6: Emisión del Título</h3>
+                                <p class="timeline-desc">Trámites finales y emisión del título profesional.</p>
+                                <ul class="timeline-checklist">
+                                    <li>Entrega de documentación final</li>
+                                    <li>Pago de aranceles de titulación</li>
+                                    <li>Recepción del título</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN PASOS DEL PROCESO (sin cambios) -->
+                <div id="pasos-section" class="content-section hidden">
+                    <!-- ... (contenido de pasos sin cambios) ... -->
+                    <h1>Pasos del Proceso</h1>
+                    <p class="subtitle" style="max-width: 42rem; margin: 0 auto 3rem;">
+                        Sigue este flujograma para completar exitosamente tu proceso de titulación.
+                    </p>
+                    
+                    <div class="flowchart-container">
+                        <ul class="flowchart-list">
+                            
+                            <!-- Paso 1 -->
+                            <li class="flowchart-item">
+                                <div class="flowchart-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-plus"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>
+                                </div>
+                                <div class="card flowchart-card">
+                                    <h3>1. Inscripción al proceso de titulación</h3>
+                                </div>
+                            </li>
+
+                            <li class="flowchart-arrow">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-down"><line x1="12" x2="12" y1="5" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+                            </li>
+
+                            <!-- Paso 2 -->
+                            <li class="flowchart-item">
+                                <div class="flowchart-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clipboard-list"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>
+                                </div>
+                                <div class="card flowchart-card">
+                                    <h3>2. Entrega de documentos</h3>
+                                    <ul class="flowchart-checklist">
+                                        <li>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                                            <span>Documentos entregados</span>
+                                        </li>
+                                        <li>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                                            <span>Formulario FMDG-1 completado</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li class="flowchart-arrow">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-down"><line x1="12" x2="12" y1="5" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+                            </li>
+
+                            <!-- Paso 3 -->
+                            <li class="flowchart-item">
+                                <div class="flowchart-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                                </div>
+                                <div class="card flowchart-card">
+                                    <h3>3. Asignación de tutor o tribunal</h3>
+                                </div>
+                            </li>
+
+                            <li class="flowchart-arrow">
+                               <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-down"><line x1="12" x2="12" y1="5" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+                            </li>
+
+                            <!-- Paso 4 -->
+                            <li class="flowchart-item">
+                                <div class="flowchart-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil-ruler"><path d="M15 5 9 1 1 9l6 6"/><path d="m11 11 6 6"/><path d="m8 8 3 3"/><path d="M16 11.33 21.67 17l-1.34 1.34-1.34-1.34-3.32 3.32-1.34-1.34-1.34-1.34 3.32-3.32-1.34-1.34Z"/><path d="m18 13 3-3 1 1-3 3-1-1Z"/></svg>
+                                </div>
+                                <div class="card flowchart-card">
+                                    <h3>4. Elaboración de proyecto o informe de grado</h3>
+                                </div>
+                            </li>
+
+                            <li class="flowchart-arrow">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-down"><line x1="12" x2="12" y1="5" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+                            </li>
+
+                            <!-- Paso 5 -->
+                            <li class="flowchart-item">
+                                <div class="flowchart-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-graduation-cap"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.084a1 1 0 0 0 0 1.838l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 6 0 0 0 12 0v-3.5"/></svg>
+                                </div>
+                                <div class="card flowchart-card">
+                                    <h3>5. Defensa de grado</h3>
+                                </div>
+                            </li>
+
+                            <li class="flowchart-arrow">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-down"><line x1="12" x2="12" y1="5" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+                            </li>
+
+                            <!-- Paso 6 -->
+                            <li class="flowchart-item">
+                                <div class="flowchart-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-award"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+                                </div>
+                                <div class="card flowchart-card">
+                                    <h3>6. Emisión de título</h3>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN PREGUNTAS FRECUENTES (sin cambios) -->
+                <div id="faq-section" class="content-section hidden">
+                    <!-- ... (contenido de FAQ sin cambios) ... -->
+                    <h1>Preguntas Frecuentes</h1>
+                    <div class="faq-container">
+                        <details class="faq-item">
+                            <summary>
+                                <span>¿Cuánto tiempo tarda el trámite completo?</span>
+                                <span class="faq-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>
+                                </span>
+                            </summary>
+                            <p>Una vez que entregas tu expediente completo (con todos los requisitos y proyecto aprobado), el proceso de revisión, defensa y emisión del título suele tardar entre 3 y 6 meses, dependiendo del calendario de la institución.</p>
+                        </details>
+
+                        <details class="faq-item">
+                            <summary>
+                                <span>¿Qué modalidades de titulación existen?</span>
+                                <span class="faq-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>
+                                </span>
+                            </summary>
+                            <p>Las modalidades más comunes incluyen: Proyecto de Grado, Tesis, Examen General de Conocimientos (CENEVAL), Titulación por promedio (Excelencia), y en algunos casos, por experiencia profesional. Consulta el Reglamento de Titulación para ver los detalles de cada una.</p>
+                        </details>
+
+                        <details class="faq-item">
+                            <summary>
+                                <span>¿Qué pasa si repruebo mi defensa de proyecto?</span>
+                                <span class="faq-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>
+                                </span>
+                            </summary>
+                            <p>Generalmente, el jurado te dará un plazo (ej. 6 meses) para realizar las correcciones y mejoras solicitadas. Tendrás una segunda y, a veces, última oportunidad para defender tu proyecto. Revisa el reglamento para conocer el procedimiento exacto.</p>
+                        </details>
+
+                        <details class="faq-item">
+                            <summary>
+                                <span>¿Dónde realizo los pagos correspondientes?</span>
+                                <span class="faq-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>
+                                </span>
+                            </summary>
+                            <p>Todos los pagos por derechos de titulación se realizan en la oficina de Caja del instituto. Debes presentar el comprobante de pago original al momento de entregar tu expediente.</p>
+                        </details>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN CONTACTO (sin cambios) -->
+                <div id="contacto-section" class="content-section hidden">
+                    <!-- ... (contenido de contacto sin cambios) ... -->
+                    <h1>Contacto</h1>
+                    
+                    <div class="grid-2-col">
+                        <div class="card">
+                            <h2>Enviar una consulta</h2>
+                            <form action="#" method="POST" class="contact-form">
+                                <div>
+                                    <label for="name">Nombre Completo</label>
+                                    <input type="text" name="name" id="name" required>
+                                </div>
+                                <div>
+                                    <label for="email">Correo Electrónico</label>
+                                    <input type="email" name="email" id="email" required>
+                                </div>
+                                <div>
+                                    <label for="message">Mensaje</label>
+                                    <textarea name="message" id="message" rows="4" required></textarea>
+                                </div>
+                                <div>
+                                    <button type="submit" class="button button-primary full-width">
+                                        Enviar Mensaje
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="card">
+                            <h2>Información de la oficina</h2>
+                            <div class="contact-info">
+                                <div class="contact-info-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                                    <div>
+                                        <h3>Dirección</h3>
+                                        <p>Av. Circunvalación entre Ismael Céspedes y Granado</p>
+                                    </div>
+                                </div>
+                                <div class="contact-info-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-phone"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.63A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                                    <div>
+                                        <h3>Teléfono</h3>
+                                        <p>(+591) 67598222</p>
+                                    </div>
+                                </div>
+                                <div class="contact-info-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                                    <div>
+                                        <h3>Correo Electrónico</h3>
+                                        <p>institutotecnologicoitsa@gmail.com</p>
+                                    </div>
+                                </div>
+                                <div class="contact-info-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clock"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                    <div>
+                                        <h3>Horario de Atención</h3>
+                                        <p>Lunes a Viernes: 08:30 - 12:30 y 14:30 - 18:30</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal del Chatbot (sin cambios) -->
+    <div id="chat-modal" class="chat-modal-container hidden">
+        <!-- ... (contenido del modal sin cambios) ... -->
+        <div class="chat-modal">
+            <div class="chat-header">
+                <h3>Asistente virtual de Titulación</h3>
+                <button id="close-chat-btn" class="chat-close-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><line x1="18" x2="6" y1="6" y2="18"/><line x1="6" x2="18" y1="6" y2="18"/></svg>
+                </button>
+            </div>
+            
+            <div id="chat-window" class="chat-window">
+                <!-- Mensaje inicial del bot (sin cambios) -->
+                <div class="bot-message-wrapper">
+                    <div class="bot-avatar"></div>
+                    <div class="chat-bubble bot-bubble">
+                        ¡Hola! 👋 Soy tu asistente de titulación. Estoy aquí para ayudarte. <br><br>Puedes preguntarme sobre:<br>- Requisitos y documentos<br>- Fechas del cronograma<br>- Pasos del proceso<br>- Información de contacto
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chat-input-area">
+                <input type="text" id="chat-input" placeholder="Escribe tu mensaje...">
+                <button id="chat-send-btn" class="chat-send-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send"><line x1="22" x2="11" y1="2" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Combinado (Sin cambios) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- Lógica de Navegación (sin cambios) ---
+            const sections = document.querySelectorAll('.content-section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const menuBtn = document.getElementById('menu-btn');
+            const activeClasses = ['nav-link-active'];
+            const inactiveClasses = ['nav-link-inactive'];
+
+            function showSection(sectionName) {
+                sections.forEach(section => section.classList.add('hidden'));
+                const targetSection = document.getElementById(`${sectionName}-section`);
+                if (targetSection) {
+                    targetSection.classList.remove('hidden');
+                }
+                navLinks.forEach(link => {
+                    link.classList.remove(...activeClasses);
+                    link.classList.add(...inactiveClasses);
+                    if (link.dataset.section === sectionName) {
+                        link.classList.remove(...inactiveClasses);
+                        link.classList.add(...activeClasses);
+                    }
+                });
+                if (mobileMenu && mobileMenu.style.display === 'flex') {
+                    mobileMenu.style.display = 'none';
+                }
+            }
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (event) => {
+                    event.preventDefault(); 
+                    const sectionName = link.dataset.section;
+                    if (sectionName) {
+                        showSection(sectionName);
+                    }
+                });
+            });
+
+            if (menuBtn) {
+                menuBtn.addEventListener('click', () => {
+                    if (mobileMenu.style.display === 'flex') {
+                        mobileMenu.style.display = 'none';
+                    } else {
+                        mobileMenu.style.display = 'flex';
+                    }
+                });
+            }
+
+            showSection('inicio');
+
+
+            // --- Lógica del Chatbot (Sin cambios) ---
+            // El JS sigue funcionando porque el id "open-chat-btn"
+            // ahora está de nuevo en el botón restaurado.
+            const chatModal = document.getElementById('chat-modal');
+            const openChatBtn = document.getElementById('open-chat-btn'); 
+            const closeChatBtn = document.getElementById('close-chat-btn');
+            const chatWindow = document.getElementById('chat-window');
+            const chatInput = document.getElementById('chat-input');
+            const chatSendBtn = document.getElementById('chat-send-btn');
+
+            if (openChatBtn) {
+                openChatBtn.addEventListener('click', () => {
+                    chatModal.classList.remove('hidden');
+                    chatInput.focus();
+                });
+            }
+
+            if (closeChatBtn) {
+                closeChatBtn.addEventListener('click', () => {
+                    chatModal.classList.add('hidden');
+                });
+            }
+
+            if (chatModal) {
+                chatModal.addEventListener('click', (e) => {
+                    if (e.target.id === 'chat-modal') {
+                        chatModal.classList.add('hidden');
+                    }
+                });
+            }
+
+            if (chatSendBtn) {
+                chatSendBtn.addEventListener('click', handleChatSend);
+            }
+
+            if (chatInput) {
+                chatInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault(); 
+                        handleChatSend();
+                    }
+                });
+            }
+
+            function handleChatSend() {
+                const userMessage = chatInput.value.trim();
+                if (userMessage === '') return; 
+
+                addMessageToChat(userMessage, 'user');
+                chatInput.value = '';
+
+                setTimeout(() => {
+                    const botResponse = generateBotResponse(userMessage);
+                    addMessageToChat(botResponse, 'bot');
+                }, 700); 
+            }
+
+            /**
+             * Función addMessageToChat (sin cambios)
+             */
+            function addMessageToChat(message, sender) {
+                const bubble = document.createElement('div');
+                bubble.className = 'chat-bubble'; 
+                
+                bubble.innerHTML = message.replace(/\n/g, '<br>');
+
+                if (sender === 'user') {
+                    bubble.classList.add('user-bubble');
+                    chatWindow.appendChild(bubble); // Añadir solo la burbuja
+                } else {
+                    // Bot: Crear wrapper, avatar y burbuja
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'bot-message-wrapper';
+
+                    const avatar = document.createElement('div');
+                    avatar.className = 'bot-avatar';
+                    
+                    bubble.classList.add('bot-bubble');
+
+                    wrapper.appendChild(avatar);
+                    wrapper.appendChild(bubble);
+                    chatWindow.appendChild(wrapper); // Añadir el wrapper completo
+                }
+
+                // Hacer scroll automático al final
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+            }
+
+            // --- Base de Conocimientos del Chatbot (sin cambios) ---
+            const knowledgeBase = [
+                {
+                    keywords: ['requisito', 'documento', 'papeles', 'necesito'],
+                    response: `¡Por supuesto! 📚 Los requisitos principales son:\n
+<strong>Académicos:</strong>
+- Haber aprobado todas las materias.
+- Práctica laboral (PEC) certificada.
+- 3 ejemplares del proyecto empastado (forro verde, letras doradas).
+
+<strong>Documentación Personal:</strong>
+- Fotocopias legalizadas (Bachiller, Nacimiento, Carnet).
+- 2 fotografías 4x4 (fondo rojo/azul).
+
+<strong>Institucionales:</strong>
+- Formulario FMDG-1.
+- Comprobante de pago de aranceles.
+
+Encontrarás la lista completa en la sección <strong>'Requisitos'</strong>.`
+                },
+                {
+                    keywords: ['convocatoria', 'estructura', 'perfil', 'pre-defensa', 'predefensa'],
+                    response: "¡Claro! 📄 Puedes descargar todos los documentos oficiales como la 'Convocatoria a defensa', 'Estructura de perfil' y 'Elaboración de pre-defensa' en la sección <strong>'Requisitos'</strong>, bajo el título 'Reglamentos y Documentos Oficiales'."
+                },
+                {
+                    keywords: ['cronograma', 'fecha', 'cuándo', 'calendario', 'recepcion', 'defensa'],
+                    response: `Aquí tienes un resumen del cronograma: 🗓️
+- <strong>Inscripción:</strong> Abril - Junio
+- <strong>Aprobación de Perfil:</strong> Febrero - Junio
+- <strong>Defensa de perfiles:</strong> Junio 12 - 31
+- <strong>Pre defensa:</strong> Noviembre 04 - 07
+- <strong>Defensa del Proyecto:</strong> Noviembre 24 - Diciembre 04
+
+Te recomiendo revisar la sección <strong>'Cronograma'</strong> para ver todos los detalles.`
+                },
+                {
+                    keywords: ['pasos', 'proceso', 'guia', 'hacer', 'flujograma'],
+                    response: `¡Con gusto! El proceso sigue 6 pasos principales: ⚙️
+1. <strong>Inscripción</strong> al proceso.
+2. <strong>Entrega</strong> de documentos (incluyendo el FMDG-1).
+3. <strong>Asignación</strong> de tutor o tribunal.
+4. <strong>Elaboración</strong> del proyecto.
+5. <strong>Defensa</strong> de grado.
+6. <strong>Emisión</strong> del título.
+
+Puedes ver el flujograma visual en la sección <strong>'Pasos del proceso'</strong>.`
+                },
+                {
+                    keywords: ['contacto', 'telefono', 'correo', 'direccion', 'ubicacion', 'horario', 'atienden'],
+                    response: `¡Toma nota! 📞
+- <strong>Teléfono:</strong> (+591) 4 4760000
+- <strong>Correo:</strong> titulacion@its.edu.bo
+- <strong>Dirección:</strong> Av. Villazón Km 10, Sacaba.
+- <strong>Horario:</strong> L-V de 08:30-12:30 y 14:30-18:30.`
+                },
+                {
+                    keywords: ['pago', 'pagar', 'costo', 'caja', 'depositar', 'arancel'],
+                    response: "Todos los pagos (aranceles, derecho a defensa, etc.) se realizan directamente en la oficina de <strong>Caja</strong> del instituto. Recuerda guardar tus comprobantes."
+                },
+                {
+                    keywords: ['cuanto', 'tiempo', 'tarda', 'demora', 'dura'],
+                    response: "Una vez que entregas tu expediente completo y aprobado, el proceso de revisión, defensa y emisión del título suele tardar <strong>entre 3 y 6 meses</strong>. ¡Un poco de paciencia!"
+                },
+                {
+                    keywords: ['modalidad', 'tipos', 'opciones'],
+                    response: `Las modalidades de titulación disponibles son:
+- Proyecto de Grado
+- Examen de Grado
+- Trabajo Dirigido
+- Excelencia Académica
+- Equivalencia de Título`
+                },
+                {
+                    keywords: ['repruebo', 'fallo', 'pasa si', 'reprobar'],
+                    response: "¡Tranquilidad! Si no apruebas tu defensa, el jurado generalmente te dará un plazo (como 6 meses) para realizar correcciones. Tendrás una segunda oportunidad. ¡Tú puedes!"
+                },
+                {
+                    keywords: ['formulario', 'fmdg-1', 'fmdg1', 'admision'],
+                    response: "El <strong>Formulario FMDG-1</strong> lo puedes descargar desde la sección <strong>'Inicio'</strong>. El enlace al Formulario de Admisión está en la sección <strong>'Requisitos'</strong> (en la tarjeta de Documentación)."
+                },
+                {
+                    keywords: ['reglamento'],
+                    response: "Puedes descargar el <strong>Reglamento de Titulación</strong> actualizado usando el botón 'Reglamento' en la sección <strong>'Inicio'</strong>."
+                },
+                {
+                    keywords: ['fotos', 'fotografia'],
+                    response: "Necesitas <strong>2 fotografías 4x4</strong> a color. Asegúrate de que sean con <strong>fondo rojo o azul</strong> y que vistas ropa formal. 📸"
+                },
+                {
+                    keywords: ['empastado', 'proyecto', 'ejemplares'],
+                    response: "Debes entregar <strong>3 ejemplares</strong> de tu proyecto. El empastado debe ser de color <strong>verde oscuro</strong> y tener las <strong>letras doradas</strong>."
+                },
+                {
+                    keywords: ['hola', 'buenos', 'buenas', 'saludos'],
+                    response: `¡Hola! 👋 Soy tu asistente de titulación. Estoy aquí para ayudarte. \n\nPuedes preguntarme sobre:\n- Requisitos y documentos\n- Fechas del cronograma\n- Pasos del proceso\n- Información de contacto`
+                },
+                {
+                    keywords: ['gracias', 'adios', 'chao', 'excelente'],
+                    response: '¡De nada! Ha sido un placer ayudarte. ¡Mucho éxito en tu titulación! 🎓'
+                }
+            ];
+
+            const defaultResponse = "🤔 Vaya, no estoy seguro de haber entendido tu consulta. \n\n¿Podrías intentarlo de nuevo usando palabras clave? Por ejemplo: \"requisitos\", \"fechas\", \"pagos\" o \"contacto\".";
+
+            // --- Función normalizeText (sin cambios) ---
+            function normalizeText(text) {
+                return text
+                    .toLowerCase()
+                    .normalize("NFD") 
+                    .replace(/[\u0300-\u036f]/g, ""); 
+            }
+
+            // --- Función generateBotResponse (sin cambios) ---
+            function generateBotResponse(userMessage) {
+                const msg = normalizeText(userMessage);
+
+                for (const rule of knowledgeBase) {
+                    if (rule.keywords.some(keyword => msg.includes(keyword))) {
+                        return rule.response;
+                    }
+                }
+                return defaultResponse;
+            }
+
+        }); // Fin del DOMContentLoaded
+    </script>
+</body>
+</html>
